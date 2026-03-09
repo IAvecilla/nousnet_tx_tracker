@@ -26,14 +26,8 @@ Real-time transaction monitoring service for Psyche training runs on Solana.
 # Enter development shell
 nix develop
 
-# Build
-cargo build --release
-
-# Run on devnet (real-time only)
-./target/release/psyche-tx-tracker serve
-
-# Run with recent transaction fetch
-./target/release/psyche-tx-tracker serve --fetch-recent
+# Run on devnet
+cargo run -- serve
 
 # Open http://localhost:8765 in your browser
 ```
@@ -47,10 +41,11 @@ Options:
       --rpc <RPC>                    Solana RPC URL [default: https://api.devnet.solana.com]
       --ws-rpc <WS_RPC>              Solana WebSocket URL (derived from --rpc if not specified)
       --port <PORT>                  HTTP/WebSocket server port [default: 8765]
-      --fetch-recent                 Fetch recent historical transactions on start
+      --skip-recent                  Skip fetching recent historical transactions on start
       --recent-limit <RECENT_LIMIT>  Number of recent transactions to fetch per program [default: 50]
-      --static-dir <STATIC_DIR>      Path to static files directory (uses embedded files if not specified)
 ```
+
+Static files are served from the `static/` directory relative to the working directory.
 
 ## API Endpoints
 
@@ -91,8 +86,5 @@ nix develop
 cargo check
 
 # Run in development
-cargo run -- serve --fetch-recent
-
-# Build release
-cargo build --release
+cargo run -- serve
 ```

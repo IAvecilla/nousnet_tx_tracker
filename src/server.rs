@@ -3,7 +3,7 @@
 use anyhow::Result;
 use axum::{
     extract::{Query, State, WebSocketUpgrade},
-    response::{Html, IntoResponse, Json},
+    response::{IntoResponse, Json},
     routing::get,
     Router,
 };
@@ -36,7 +36,6 @@ pub async fn start_server(
     port: u16,
     store: Arc<TransactionStore>,
     tx_broadcast: broadcast::Sender<TransactionInfo>,
-    static_dir: Option<&str>,
     rpc_url: String,
 ) -> Result<()> {
     let state = AppState {
@@ -59,13 +58,8 @@ pub async fn start_server(
         .layer(cors)
         .with_state(state);
 
-    // Serve static files if directory is provided
-    if let Some(dir) = static_dir {
-        app = app.nest_service("/", ServeDir::new(dir).append_index_html_on_directories(true));
-    } else {
-        // Serve embedded index page
-        app = app.route("/", get(index_handler));
-    }
+    // Serve static files
+    app = app.nest_service("/", ServeDir::new("static").append_index_html_on_directories(true));
 
     let addr = format!("0.0.0.0:{}", port);
     info!("Starting server on http://{}", addr);
@@ -168,11 +162,6 @@ async fn fetch_history_handler(
         error: result.error,
         transactions: result.transactions,
     })
-}
-
-/// GET / - Serve embedded index page
-async fn index_handler() -> Html<&'static str> {
-    Html(include_str!("../static/index.html"))
 }
 
 /// WebSocket handler for real-time updates

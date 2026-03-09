@@ -42,17 +42,14 @@ enum Commands {
         #[arg(long, default_value = "8765")]
         port: u16,
 
-        /// Fetch recent historical transactions on start
+        /// Skip fetching recent historical transactions on start
         #[arg(long)]
-        fetch_recent: bool,
+        skip_recent: bool,
 
         /// Number of recent transactions to fetch per program (default: 50)
         #[arg(long, default_value = "50")]
         recent_limit: usize,
 
-        /// Path to static files directory (uses embedded files if not specified)
-        #[arg(long)]
-        static_dir: Option<String>,
     },
 }
 
@@ -71,9 +68,8 @@ async fn main() -> Result<()> {
             rpc,
             ws_rpc,
             port,
-            fetch_recent,
+            skip_recent,
             recent_limit,
-            static_dir,
         } => {
             // Derive WebSocket URL from RPC URL if not specified
             let ws_url = ws_rpc.unwrap_or_else(|| {
@@ -94,7 +90,7 @@ async fn main() -> Result<()> {
             let (tx_sender, _) = broadcast::channel::<TransactionInfo>(1000);
 
             // Optionally fetch recent transactions
-            if fetch_recent {
+            if !skip_recent {
                 info!("Fetching recent transactions...");
                 if let Err(e) = fetcher::fetch_recent_transactions(
                     &rpc,
@@ -128,7 +124,6 @@ async fn main() -> Result<()> {
                 port,
                 store,
                 tx_sender,
-                static_dir.as_deref(),
                 rpc.clone(),
             ).await?;
         }
