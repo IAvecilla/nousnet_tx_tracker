@@ -1,0 +1,30 @@
+[package]
+name = "psyche-tx-tracker"
+version = "0.1.0"
+edition = "2021"
+description = "Real-time transaction monitoring service for Psyche training runs"
+
+[dependencies]
+# Solana
+solana-client = "1.18"
+solana-sdk = "1.18"
+solana-transaction-status = "1.18"
+solana-pubsub-client = "1.18"
+
+# Serialization
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1"
+bs58 = "0.5"
+sha2 = "0.10"
+
+# Web server
+axum = { version = "0.7", features = ["ws"] }
+tower-http = { version = "0.5", features = ["fs", "cors"] }
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = "1"

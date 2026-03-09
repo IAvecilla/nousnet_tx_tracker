@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psyche Transaction Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Psyche Transaction Tracker</h1>
+            <div class="connection-status" id="connection-status">
+                <span class="status-dot disconnected"></span>
+                <span class="status-text">Disconnected</span>
+            </div>
+        </header>
+
+        <div class="stats-panel" id="stats-panel">
+            <div class="stat-card">
+                <div class="stat-value" id="stat-total">0</div>
+                <div class="stat-label">Total Transactions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-signers">0</div>
+                <div class="stat-label">Unique Signers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-runs">0</div>
+                <div class="stat-label">Active Runs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-latest">-</div>
+                <div class="stat-label">Latest Update</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label for="filter-run-id">Run ID</label>
+                <input type="text" id="filter-run-id" placeholder="Filter by run ID...">
+            </div>
+            <div class="filter-group">
+                <label for="filter-signer">Signer</label>
+                <input type="text" id="filter-signer" placeholder="Filter by signer...">
+            </div>
+            <div class="filter-group">
+                <label for="filter-type">Instruction Type</label>
+                <select id="filter-type">
+                    <option value="">All Types</option>
+                    <optgroup label="Coordinator">
+                        <option value="init_coordinator">init_coordinator</option>
+                        <option value="join_run">join_run</option>
+                        <option value="tick">tick</option>
+                        <option value="witness">witness</option>
+                        <option value="warmup_witness">warmup_witness</option>
+                        <option value="health_check">health_check</option>
+                        <option value="checkpoint">checkpoint</option>
+                        <option value="set_paused">set_paused</option>
+                        <option value="update">update</option>
+                    </optgroup>
+                    <optgroup label="Authorizer">
+                        <option value="authorization_create">authorization_create</option>
+                        <option value="authorization_close">authorization_close</option>
+                    </optgroup>
+                    <optgroup label="Treasurer">
+                        <option value="run_create">run_create</option>
+                        <option value="participant_create">participant_create</option>
+                        <option value="participant_claim">participant_claim</option>
+                    </optgroup>
+                    <optgroup label="Mining Pool">
+                        <option value="pool_create">pool_create</option>
+                        <option value="lender_deposit">lender_deposit</option>
+                        <option value="lender_claim">lender_claim</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-program">Program</label>
+                <select id="filter-program">
+                    <option value="">All Programs</option>
+                    <option value="coordinator">Coordinator</option>
+                    <option value="authorizer">Authorizer</option>
+                    <option value="treasurer">Treasurer</option>
+                    <option value="mining_pool">Mining Pool</option>
+                </select>
+            </div>
+            <div class="filter-actions">
+                <button id="btn-apply-filters">Apply Filters</button>
+                <button id="btn-clear-filters" class="secondary">Clear</button>
+                <button id="btn-export" class="secondary">Export JSON</button>
+            </div>
+        </div>
+
+        <div class="transactions-panel">
+            <div class="transactions-header">
+                <h2>Transactions</h2>
+                <div class="transactions-controls">
+                    <label>
+                        <input type="checkbox" id="auto-scroll" checked>
+                        Auto-scroll
+                    </label>
+                    <button id="btn-pause" class="small">Pause</button>
+                </div>
+            </div>
+            <div class="transactions-list" id="transactions-list">
+                <div class="loading">Loading transactions...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="tx-detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Transaction Details</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="tx-detail-content">
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
