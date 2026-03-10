@@ -1,15 +1,6 @@
-# Psyche Transaction Tracker
+# Nousnet Transaction Tracker
 
 Real-time transaction monitoring service for Psyche training runs on Solana.
-
-## Features
-
-- Real-time monitoring of all Psyche program transactions via WebSocket
-- In-memory transaction store (keeps last 5000 transactions)
-- Web UI with transaction list, filters, and statistics
-- Decodes Anchor instruction types (coordinator, authorizer, treasurer, mining pool)
-- Extracts run IDs and client pubkeys from transactions
-- No database required - queries Solana RPC directly
 
 ## Tracked Programs
 
@@ -55,26 +46,6 @@ Static files are served from the `static/` directory relative to the working dir
   - Query params: `run_id`
 - `GET /api/health` - Health check
 - `GET /ws` - WebSocket for real-time transaction updates
-
-## Architecture
-
-```
-┌─────────────────┐     ┌──────────────────────┐     ┌─────────────────┐
-│  Solana RPC     │────▶│  Rust Backend        │────▶│  In-Memory      │
-│  (WebSocket)    │     │  - Log subscription  │     │  Store          │
-└─────────────────┘     │  - Tx decode         │     │  (last 5000 tx) │
-                        │  - HTTP server       │     └─────────────────┘
-                        │  - WebSocket server  │◀───┐
-                        └──────────────────────┘    │
-                                 │                  │
-                                 ▼                  │
-                        ┌──────────────────────┐    │
-                        │  Web UI (HTML/JS)    │────┘
-                        │  - Real-time updates │
-                        │  - Transaction list  │
-                        │  - Filters & search  │
-                        └──────────────────────┘
-```
 
 ## Development
 
